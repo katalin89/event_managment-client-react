@@ -1,40 +1,57 @@
-import React,{useEffect,useState} from "react";
-import Event from "./Event";
-// import{getAllEvents} from "../../services/api";
-import{getAllEvents} from "../services/api";
+import React, { useEffect ,useState} from "react";
 
+import Event from "../home/Event";
+
+import { getAllEvents } from "../services/api";
 
 function Home(){
-    
-        const [events,setEvents]=useState([]);
-    
-        useEffect(()=>{
-            handleEvents();
-            
-        },[]);
+    const[events,setEvents]=useState([]);
+   
+    useEffect(()=>{
+         //se apeleaza de fiecare data cand se incarca pagina
+    handleEvents();
+    },[]);
 
-        async function handleEvents(){
-    
-        return(
-            <div>
-                <h1>Events</h1>
-                <p><a className="button"></a>Create new event</p>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Event Title</th>
-                            <th>Event Date</th>
-                            <th>Event Location</th>
-                            <th>Event Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {events.length>0 ?events.map((e)=> <Event event={e}/>):null}
-                    </tbody>
-                </table>
-            </div>
-        );
+    async function handleEvents(){
+        let  data=await getAllEvents();
+        console.log(data);
+        setEvents(data);
+        console.log(events);
+        
     }
+
+    return (
+      
+    <>
+      <header>
+        <input id="userId" name="userId" class="userId" type="hidden" value="${userId}"/>
+        <ul class="error">
+        </ul>
+        <div class="wrap header--flex">
+            <h1 class="header--logo events">Home</h1>
+            <nav>
+            <h1 class="signOut">Sign Out</h1>
+            </nav>
+        </div>
+    </header>
+
+    <button id="newEvent" class="button new-event">Add New Event</button>
+
+    <main>
+        
+        <div class="wrap main--grid root-events">
+        
+             
+             {
+                events&&(events.map((event)=>{
+                    return <Event event={event}/>
+                }
+                ))
+             }
+        </div>
+    </main>
+    </>
+    );
 }
 
-export default Home;
+export default Home

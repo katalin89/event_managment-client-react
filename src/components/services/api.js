@@ -1,20 +1,27 @@
-function api(path,method,body=null){
-    const url = 'http://localhost:8080/api/v1/event' + path;
+function api(path, method, body) {
+    // const e declarata o data, pe cat let se redeclara la folosirea functiei
+    const url = "http://localhost:8080/api/v1/event" + path;
+  
     const options = {
-        method: method,
-        headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-        },
+      method,
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "X-Requested-With": "XMLHttpRequest",
+      },
     };
+  
+    if (body !== null) {
+      options.body = JSON.stringify(body);
+  
+      //stringify transforma din javascript in json
+      //parse transforma din json in javascript
+    }
+    return fetch(url, options);
+  }
+  
 
-    if(body!==null){
-        options.body = JSON.stringify(body);
-    } 
-    return fetch(url,options);
 
-}
-
-export async function getAllEvents(){
+ async function getAllEvents(){
 
     let data=await api('/all','GET');
 
@@ -22,3 +29,5 @@ export async function getAllEvents(){
 
     return data;
 }
+
+export{getAllEvents};
